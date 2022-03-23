@@ -5,6 +5,7 @@ import { IEntry } from '../../interfaces/entry';
 type EntriesActionType =
     | { type: '[Entry] Add-Entry', payLoad: IEntry }
     | { type: '[Entry] Update-Entry', payLoad: IEntry }
+    | { type: '[Entry] Initial-Entry', payLoad: IEntry[] }
 
 
 export const entriesReducer = ( state: EntriesState, action: EntriesActionType ): EntriesState => {
@@ -15,7 +16,7 @@ export const entriesReducer = ( state: EntriesState, action: EntriesActionType )
                 ...state,
                 entries: [ ...state.entries, action.payLoad ]
             }
-            break;
+
         case '[Entry] Update-Entry':
             return {
                 ...state,
@@ -27,7 +28,13 @@ export const entriesReducer = ( state: EntriesState, action: EntriesActionType )
                     return entry
                 })
             }
-            break;
+
+        case '[Entry] Initial-Entry':
+            return {
+                ...state,
+                entries: [ ...action.payLoad ]
+            }
+    
 
         default:
             return state

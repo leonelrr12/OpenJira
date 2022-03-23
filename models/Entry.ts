@@ -1,0 +1,23 @@
+import mongoose, { Model, Schema } from 'mongoose';
+import { IEntry } from '../interfaces';
+
+export interface iEntry extends IEntry {}
+
+
+const entrySchema = new Schema({
+    description: { type: String, required: true },
+    createAt: { type: Number },
+    status: {
+        type: String,
+        enum: {
+            values: ['pending','in-progress','finished'],
+            message: '{VALUE} no es un estado permitido'
+        },
+        default: 'pending'
+    },
+});
+
+
+const EntryModel: Model<iEntry> = mongoose.models.Entry || mongoose.model( 'Entry', entrySchema )
+
+export default EntryModel;

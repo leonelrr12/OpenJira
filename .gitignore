@@ -3,6 +3,8 @@
 # base de dato
 mongo/
 
+.env
+
 # dependencies
 /node_modules
 /.pnp
