@@ -6,6 +6,7 @@ type EntriesActionType =
     | { type: '[Entry] Add-Entry', payLoad: IEntry }
     | { type: '[Entry] Update-Entry', payLoad: IEntry }
     | { type: '[Entry] Initial-Entry', payLoad: IEntry[] }
+    | { type: '[Entry] Delete-Entry', payLoad: string }
 
 
 export const entriesReducer = ( state: EntriesState, action: EntriesActionType ): EntriesState => {
@@ -27,6 +28,12 @@ export const entriesReducer = ( state: EntriesState, action: EntriesActionType )
                     }
                     return entry
                 })
+            }
+
+        case '[Entry] Delete-Entry':
+            return {
+                ...state,
+                entries: state.entries.filter( entry => entry._id !== action.payLoad )
             }
 
         case '[Entry] Initial-Entry':

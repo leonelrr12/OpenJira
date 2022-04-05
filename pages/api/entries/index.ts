@@ -16,10 +16,7 @@ export default function handler (req: NextApiRequest, res: NextApiResponse<Data>
 
         case 'POST':
             return postEntries( req, res )
-
-        case 'POST':
-            return postEntries( req, res )
-
+            
         default:
             return res.status(400).json({ message: 'Endpoint no existe' });
     }
@@ -60,4 +57,3 @@ const postEntries = async ( req: NextApiRequest, res: NextApiResponse<Data> ) =>
         return res.status(500).json({ message: 'Algo salió mal, revisar consola del servidor.' })
     }
 }
-

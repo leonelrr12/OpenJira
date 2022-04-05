@@ -1,4 +1,5 @@
 import { FC, useEffect, useReducer } from 'react';
+import { useSnackbar } from 'notistack';
 
 import { entriesApi } from '../../apis';
 
@@ -17,7 +18,7 @@ const Entries_INITIAL_STATE: EntriesState = {
 
 
 export const EntriesProvider: FC = ({ children }) => {
-
+    const { enqueueSnackbar } = useSnackbar();
     const [state, dispatch] = useReducer(entriesReducer, Entries_INITIAL_STATE)
 
     const addNewEntry = async (description: string) => {
@@ -29,10 +30,40 @@ export const EntriesProvider: FC = ({ children }) => {
         }
     }
 
-    const updateEntry = async ({ _id, description, status }: IEntry ) => {
+    const updateEntry = async ({ _id, description, status }: IEntry, showSnackbar = false ) => {
         try {
             const { data } = await entriesApi.put<IEntry>(`/entries/${ _id }`, { description, status }) 
             dispatch({ type: '[Entry] Update-Entry', payLoad: data })
+
+            if(showSnackbar)
+                enqueueSnackbar('Entrada actualizada ...', {
+                    variant: 'success',
+                    autoHideDuration: 1500,
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right'
+                    }
+                });
+
+        } catch (error) {
+            console.log({ error })
+        }
+    }
+
+    const deleteEntry = async ( _id: string ) => {
+        try {
+            await entriesApi.delete(`/entries/${ _id }`) 
+            dispatch({ type: '[Entry] Delete-Entry', payLoad: _id })
+
+            enqueueSnackbar('Entrada eleminada ...', {
+                variant: 'success',
+                autoHideDuration: 1500,
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right'
+                }
+            });
+
         } catch (error) {
             console.log({ error })
         }
@@ -55,6 +86,7 @@ export const EntriesProvider: FC = ({ children }) => {
             // Methods
             addNewEntry,
             updateEntry,
+            deleteEntry,
         }}>
             {children}
         </EntriesContext.Provider>

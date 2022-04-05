@@ -44,8 +44,8 @@ export const NewEntry = () => {
                             helperText={ inputValue.length <= 0 && touched && 'Ingrese un valor' }
                             error={ inputValue.length <= 0 && touched }
                             value={ inputValue }
-                            onChange={ onTextFieldChange }
                             onBlur={ () => setTouched(true) }
+                            onChange={ onTextFieldChange }
                         />
 
                         <Box display='flex' justifyContent='space-between'>

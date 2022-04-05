@@ -22,6 +22,9 @@ export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
         case 'GET':
             return getEntry( req, res )
     
+        case 'DELETE':
+            return deleteEntry( req, res )
+    
         default:
             return res.status(400).json({ message: 'Methodo no válido.' })
     }
@@ -69,4 +72,23 @@ const getEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     await db.disconnect()
     return res.status(200).json( entry )
+}
+
+
+const deleteEntry = async (req: NextApiRequest, res: NextApiResponse) => {
+    
+    const { id } = req.query;
+
+    await db.conect()
+
+    const entry = await Entry.findById( id );
+    if( !entry ) {
+        await db.disconnect()
+        return res.status(400).json({ message: 'No hay estrada con este ID: ' + id })
+    }
+
+    await entry.delete()
+
+    await db.disconnect()
+    return res.status(200).json({ id })
 }
